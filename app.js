@@ -26,10 +26,9 @@ app.locals.title = `${capitalized(projectName)}- Generated with Ironlauncher`
 
 // 👇 Start handling routes here
 const index = require('./routes/index')
-const movies = require("./routes/movies")
+app.use("/", index);
 
 app.get("/movies", async (req, res) => {
-    console.log(`running app.get("/movies")`)
     const moviesFromDB = await getMovies();
     let data = { movies: moviesFromDB };
     res.render("movies", data);
@@ -38,7 +37,6 @@ app.get("/movies", async (req, res) => {
 app.get('/:id', async (req, res) => {
     const { id } = req.params;
     const movieFromDB = await getMovieById(id);
-    console.log(movieFromDB);
     let data = { movie: movieFromDB };
     res.render("oneMovie", data)
   });
@@ -68,5 +66,3 @@ async function getMovieById(id) {
         console.log(error);
     }
 }
-
-// getMovies();
