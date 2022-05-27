@@ -30,9 +30,17 @@ const movies = require("./routes/movies")
 
 app.get("/movies", async (req, res) => {
     console.log(`running app.get("/movies")`)
-    const moviesFromDB = await getMovies()
-    let data = { movies: moviesFromDB }
-    res.render("movies", data)
+    const moviesFromDB = await getMovies();
+    let data = { movies: moviesFromDB };
+    res.render("movies", data);
+});
+  
+app.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    const movieFromDB = await getMovieById(id);
+    console.log(movieFromDB);
+    let data = { movie: movieFromDB };
+    res.render("oneMovie", data)
   });
 
 
@@ -45,12 +53,19 @@ module.exports = app
 
 async function getMovies() {
     try {
-        const x = await mongoose.connect(MONGO_URI);
-        console.log(`connected HIHIHI!to the database: ${x.connection.name}`)
         const y = await Movie.find();
         return y;
     } catch (error){
     console.log(error);
+    }
+}
+
+async function getMovieById(id) {
+    try {
+        const z = await Movie.findById(id);
+        return z
+    } catch (error) {
+        console.log(error);
     }
 }
 
